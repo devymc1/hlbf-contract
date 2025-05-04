@@ -114,6 +114,7 @@ contract MMFManager is ReentrancyGuardUpgradeable, OwnableUpgradeable, UUPSUpgra
 
         ytoken = FundToken(_ytoken);
         _ytokenDecimals = ytoken.decimals();
+        if (_ytokenDecimals < 2) revert BadDecimals();
         
         oracle = ITokenPriceOracle(_oracle);
         _oracleDecimals = oracle.decimals();
@@ -212,7 +213,7 @@ contract MMFManager is ReentrancyGuardUpgradeable, OwnableUpgradeable, UUPSUpgra
 
         // rounding to USD decimals {2}
         uint256 usdAmount;
-        if (stableDecimals > 2) usdAmount = _stableAmount / 10 ** (stableDecimals - 2);
+        if (stableDecimals >= 2) usdAmount = _stableAmount / 10 ** (stableDecimals - 2);
         else if (stableDecimals < 2) usdAmount = _stableAmount * (10 ** (2 - stableDecimals));
         // first scaling to Yield Token decimals {6}
         usdAmount *= 10 ** (_ytokenDecimals - 2);

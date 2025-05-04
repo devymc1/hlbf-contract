@@ -19,6 +19,7 @@ error BadAddress();
 error BadAmount();
 error BadPrice();
 error BadOracleDecimals();
+error BadDecimals();
 error FeesPending();
 error InvalidSignature();
 error InsufficientStableBalance();

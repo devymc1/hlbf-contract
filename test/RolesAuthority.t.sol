@@ -179,4 +179,23 @@ contract RolesAuthorityTest is Test {
     function testCannotCallWithoutPermission() public {
         assertFalse(auth.canCall(user1, address(target), FOO_SIG));
     }
+
+    function testSetUserRoleVulnerability() public {
+        address attacker = address(0x100);
+        address victim = address(0x101);
+
+        // Exploit: Attacker grants themselves the Investor_Whitelisted role
+        vm.startPrank(attacker);
+        vm.expectRevert(Unauthorized.selector);
+
+        auth.setUserRole(attacker, Role.Investor_Whitelisted, true);
+        vm.stopPrank();
+
+
+        // Attacker can also assign roles to other users
+        vm.startPrank(attacker);
+        vm.expectRevert(Unauthorized.selector);
+        auth.setUserRole(victim, Role.Investor_Whitelisted, true);
+        vm.stopPrank();
+    }
 } 

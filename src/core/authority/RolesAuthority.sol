@@ -138,7 +138,7 @@ contract RolesAuthority is IAuthority, Initializable, UUPSUpgradeable {
 
     function setUserRole(address user, Role role, bool enabled) public virtual {
         if (role == Role.System_Admin) _assertOwner();
-        
+        else _assertPermissions();
         _setUserRole(user, role, enabled);
     }
 
